@@ -97,6 +97,10 @@ def _draw_colorbar(stat_map_img, axes,
 	return cbar_ax, p_ax,vmin,vmax,colmap
 
 def make_pos(stat_map):
+	"""
+	Creates a Nifti1Image from given stat_map that contains only
+	positive values for plotting positive values only.
+	"""
 	img = nib.load(stat_map)
 	img_data = img.get_fdata()
 	img_data[img_data < 0] = 0
