@@ -96,6 +96,17 @@ def _draw_colorbar(stat_map_img, axes,
 
 	return cbar_ax, p_ax,vmin,vmax,colmap
 
+def make_pos(stat_map):
+	"""
+	Creates a Nifti1Image from given stat_map that contains only
+	positive values for plotting positive values only.
+	"""
+	img = nib.load(stat_map)
+	img_data = img.get_fdata()
+	img_data[img_data < 0] = 0
+	img_pos=nib.Nifti1Image(img_data,img.affine)
+	return img_pos
+
 def scaled_plot(template,
 	fig=None,
 	ax=None,
@@ -152,6 +163,9 @@ def scaled_plot(template,
 
 	if stat_cmap:
 		cmap=stat_cmap
+
+	if pos_values:
+		stat_map=make_pos(stat_map)
 
 	if stat_map and cut is None:
 		#If cut is not specified, use cut_coords as determined by nilearns plot_stat_map()
